@@ -1,0 +1,7 @@
+name: 'Vowel Frequency Analyzer'
+description: 'Analyzes vowel frequencies in data.txt and updates README.md via Docker'
+runs:
+  using: 'docker'
+  image: '../../../Dockerfile'
+  args:
+    - ${{ github.actor }}
