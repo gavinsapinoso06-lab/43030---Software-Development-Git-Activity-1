@@ -1,0 +1,56 @@
+name: Vowel Analysis Docker Action
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data.txt'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Custom Docker Action
+        uses: ./
+
+      - name: Commit and Push README changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: update vowel analysis report for data.txt" || echo "No changes to commit"
+          git push
+EOFname: Vowel Analysis Docker Action
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data.txt'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Custom Docker Action
+        uses: ./
+
+      - name: Commit and Push README changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: update vowel analysis report for data.txt" || echo "No changes to commit"
+          git push
