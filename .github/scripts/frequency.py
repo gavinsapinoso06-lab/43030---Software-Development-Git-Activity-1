@@ -6,11 +6,9 @@ def count_vowels(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             text = f.read().lower()
             
-        # Count only characters that are vowels
         vowels_found = [char for char in text if char in "aeiou"]
         counts = Counter(vowels_found)
         
-        # Return counts with standard lowercase vowel keys
         return {
             'a': counts['a'],
             'e': counts['e'],
@@ -23,7 +21,7 @@ def count_vowels(file_path):
         sys.exit(1)
 
 if __name__ == "__main__":
-if len(sys.argv) != 2:
+    if len(sys.argv) != 2:
         print("Usage: python frequency.py <file_path>", file=sys.stderr)
         sys.exit(1)
         
