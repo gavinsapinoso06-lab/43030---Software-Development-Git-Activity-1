@@ -28,7 +28,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
-          git status
           git add README.md
           git commit -m "docs: update vowel frequency analysis report" || echo "No changes to commit"
-          git push
+          git pull origin main --rebase || echo "No remote changes to pull"
+          git push origin main
