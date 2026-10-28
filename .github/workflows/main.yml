@@ -5,20 +5,12 @@ on:
     branches:
       - main
 
-concurrency:
-  group: ci-vowel-analysis-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Build Docker Image
         run: docker build --no-cache -t vowel-frequency-analyzer:latest .
@@ -29,25 +21,3 @@ jobs:
             -v ${{ github.workspace }}:/app \
             -e GITHUB_USER="${{ github.actor }}" \
             vowel-frequency-analyzer:latest
-
-      - name: Update index.html Based on Actor
-        run: |
-          if [ "${{ github.actor }}" == "gavinsapinoso06-lab" ]; then
-            sed -i '/<\/body>/i <p>Updated by Team Leader (${{ github.actor }}) on '"$(date)"'</p>' index.html
-          else
-            sed -i '/<\/body>/i <p>Updated by Team Member (${{ github.actor }}) on '"$(date)"'</p>' index.html
-          fi
-
-      - name: Pull Remote Changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull origin main --rebase || echo "No rebase needed"
-
-      - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "docs: update vowel frequency analysis and index.html [skip ci]"
-          file_pattern: README.md index.html
-          commit_user_name: github-actions[bot]
-          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
