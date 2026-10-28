@@ -11,9 +11,3 @@ echo -e "$FREQ_RESULT" >> README.md
 echo -e "\`\`\`" >> README.md
 
 echo "README updated successfully."
-git config --global --add safe.directory /app
-git config --global user.name "github-actions"
-git config --global user.email "github-actions@users.noreply.github.com"
-git add README.md
-git commit -m "docs: update README with latest vowel frequency analysis" || echo "No changes to commit"
-git push
