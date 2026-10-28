@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - main
-
-concurrency:
-  group: ci-vowel-analysis-${{ github.ref }}
-  cancel-in-progress: false
+      - master
 
 jobs:
   build:
@@ -17,8 +14,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Build Docker Image
         run: docker build --no-cache -t vowel-frequency-analyzer:latest .
@@ -35,11 +30,15 @@ jobs:
         run: |
           echo "### Updated by ${{ github.actor }} on $(date '+%Y-%m-%d %H:%M:%S') [Commit: $(git rev-parse --short HEAD)]" >> README.md
 
-      # Activity 4: Commit and Push Changes securely
+      # Activity 4: Commit and Push Changes (Lab Standard)
       - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Workflow: Updated HTML and README for ${{ github.actor }} [skip ci]"
-          file_pattern: README.md index.html
-          commit_user_name: github-actions[bot]
-          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin main --rebase || git pull origin master --rebase || true
+          git add .
+          git commit -m "Workflow: Updated HTML and README for ${{ github.actor }} [skip ci]" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
