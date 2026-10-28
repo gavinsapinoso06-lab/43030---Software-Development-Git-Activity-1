@@ -24,12 +24,12 @@ jobs:
             -e GITHUB_USER="${{ github.actor }}" \
             vowel-frequency-analyzer:latest
 
-      # Activity 3: Update README (Step 3)[cite: 6]
+      # Activity 3: Update README
       - name: Update README
         run: |
           echo "### Updated by ${{ github.actor }} on $(date '+%Y-%m-%d %H:%M:%S') [Commit: $(git rev-parse --short HEAD)]" >> README.md
 
-      # Activity 4: Commit Changes Back to the Repository (Step 4)[cite: 6]
+      # Activity 4: Commit and Push Changes with Rebase
       - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
@@ -37,6 +37,7 @@ jobs:
           git add .
           git commit -m "Workflow: Updated HTML and README for ${{ github.actor }}" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git pull origin main --rebase
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
