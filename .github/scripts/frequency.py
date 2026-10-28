@@ -1,27 +1,38 @@
-import os
+import sys
+from collections import Counter
 
-def count_vowels():
-    file_path = "data.txt"
-    if not os.path.exists(file_path):
-        print("Error: data.txt not found.")
-        return None
-
-    vowels = {'A': 0, 'E': 0, 'I': 0, 'O': 0, 'U': 0}
-    
-    with open(file_path, "r", encoding="utf-8") as f:
-        text = f.read()
-        for char in text:
-            upper_char = char.upper()
-            if upper_char in vowels:
-                vowels[upper_char] += 1
+def count_vowels(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            text = f.read().lower()
+            
+        # Count only characters that are vowels
+        vowels_found = [char for char in text if char in "aeiou"]
+        counts = Counter(vowels_found)
         
-    return vowels
+        # Return counts with standard lowercase vowel keys
+        return {
+            'a': counts['a'],
+            'e': counts['e'],
+            'i': counts['i'],
+            'o': counts['o'],
+            'u': counts['u']
+        }
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
-    results = count_vowels()
-    if results:
-        print(f"A: {results['A']}")
-        print(f"E: {results['E']}")
-        print(f"I: {results['I']}")
-        print(f"O: {results['O']}")
-        print(f"U: {results['U']}")
+if len(sys.argv) != 2:
+        print("Usage: python frequency.py <file_path>", file=sys.stderr)
+        sys.exit(1)
+        
+    target_file = sys.argv[1]
+    result = count_vowels(target_file)
+    
+    if result:
+        print(f"a: {result['a']}")
+        print(f"e: {result['e']}")
+        print(f"i: {result['i']}")
+        print(f"o: {result['o']}")
+        print(f"u: {result['u']}")
